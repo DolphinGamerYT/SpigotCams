@@ -3,6 +3,7 @@ package com.dolphln.spigotcams.core;
 import com.dolphln.spigotcams.SpigotCams;
 import com.dolphln.spigotcams.models.BasicLocation;
 import com.dolphln.spigotcams.models.CamInfo;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -30,18 +31,25 @@ public class CameraManager {
         this.playerLocationsCache = new HashMap<>();
         this.playerGamemodesCache = new HashMap<>();
 
-        this.teleportTaskId = plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
+        /*this.teleportTaskId = plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
             this.playerCameras.forEach((uuid, cam) -> {
                 Player player = plugin.getServer().getPlayer(uuid);
                 if (player == null) return;
 
                 player.teleport(cam.getLocation().getLocation());
             });
-        }, 0L, 1L).getTaskId();
+        }, 0L, 1L).getTaskId();*/
+
+        this.loadCams();
     }
 
-    public void addPlayer(Player player, CamInfo cam) {
-        if (player == null || cam == null) return;
+    private void loadCams() {
+        cams.clear();
+        cams.addAll(this.plugin.getDataFile().getAllCams());
+    }
+
+    public boolean addPlayer(Player player, CamInfo cam) {
+        if (player == null || cam == null) return false;
 
         playerCameras.put(player.getUniqueId(), cam);
         if (!playerLocationsCache.containsKey(player.getUniqueId())) {
@@ -50,10 +58,14 @@ public class CameraManager {
         if (!playerGamemodesCache.containsKey(player.getUniqueId())) {
             playerGamemodesCache.put(player.getUniqueId(), player.getGameMode());
         }
+        player.setGameMode(GameMode.SPECTATOR);
+        player.teleport(cam.getLocation().getLocation());
+        return true;
     }
 
-    public void removePlayer(Player player) {
-        playerCameras.remove(player.getUniqueId());
+    public boolean removePlayer(Player player) {
+        CamInfo cam = playerCameras.remove(player.getUniqueId());
+        if (cam == null) return false;
         BasicLocation loc = playerLocationsCache.remove(player.getUniqueId());
         if (loc != null) {
             player.teleport(loc.getLocation());
@@ -62,24 +74,44 @@ public class CameraManager {
         if (gm != null) {
             player.setGameMode(gm);
         }
+        return true;
     }
 
     public void addCam(CamInfo cam) {
-        if (!cams.contains(cam)) {
+        if (cams.stream().noneMatch(c -> c.getUuid().equals(cam.getUuid()))) {
             cams.add(cam);
             this.plugin.getDataFile().saveCam(cam);
         }
     }
 
-    public void removeCam(CamInfo cam) {
-        if (cams.contains(cam)) {
-            cams.remove(cam);
-            this.plugin.getDataFile().removeCam(cam);
+    public void removeCam(CamInfo removedCam) {
+        if (cams.contains(removedCam)) {
+            cams.remove(removedCam);
+            this.plugin.getDataFile().removeCam(removedCam);
+            this.playerCameras.forEach((uuid, cam) -> {
+                if (!cam.getUuid().equals(removedCam.getUuid())) return;
+                Player player = Bukkit.getPlayer(uuid);
+                if (player != null) {
+                    removePlayer(player);
+                }
+            });
         }
     }
 
     public boolean isPlayerInCam(Player player) {
         return playerCameras.containsKey(player.getUniqueId());
+    }
+
+    public CamInfo getPlayerCam(Player player) {
+        return playerCameras.get(player.getUniqueId());
+    }
+
+    public CamInfo getCam(UUID uuid) {
+        return cams.stream().filter(c -> c.getUuid().equals(uuid)).findFirst().orElse(null);
+    }
+
+    public List<CamInfo> getCams() {
+        return new ArrayList<>(cams);
     }
 
 }

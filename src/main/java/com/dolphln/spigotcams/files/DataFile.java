@@ -106,8 +106,8 @@ public class DataFile {
         String path = "cams." + uuid.toString() + ".";
         if (this.data.contains(path)) {
             return new CamInfo(
-                    UUID.fromString(this.data.getString(path + "name")),
-                    this.data.getString(path + "type"),
+                    uuid,
+                    this.data.getString(path + "name"),
                     this.getLocation(path + "loc"),
                     CamType.valueOf(this.data.getString(path + "type"))
             );

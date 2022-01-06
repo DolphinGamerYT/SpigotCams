@@ -117,9 +117,11 @@ public class DataFile {
 
     public List<UUID> getAllUUIDs() {
         List<UUID> uuids = new ArrayList<>();
-        for (String key : this.data.getConfigurationSection("cams").getKeys(false)) {
-            uuids.add(UUID.fromString(key));
-        }
+        try {
+            for (String key : this.data.getConfigurationSection("cams").getKeys(false)) {
+                uuids.add(UUID.fromString(key));
+            }
+        } catch (Exception ignore) {}
         return uuids;
     }
 

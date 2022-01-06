@@ -43,6 +43,7 @@ public class CamMenu {
 
         this.buildGui();
         this.updateTitle();
+        this.plugin.getCameraManager().removePlayer(player);
         this.gui.show(player);
     }
 
@@ -52,7 +53,7 @@ public class CamMenu {
 
         ItemStack bgItem = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
         ItemMeta bgMeta = bgItem.getItemMeta();
-        bgMeta.setDisplayName("&f ");
+        bgMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&f "));
         bgMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
         bgItem.setItemMeta(bgMeta);
         StaticPane bg = new StaticPane(0, 5, 9, 1, Pane.Priority.LOWEST);
@@ -86,7 +87,7 @@ public class CamMenu {
 
         ItemStack nextPage = new ItemStack(Material.ARROW);
         ItemMeta nextPageMeta = nextPage.getItemMeta();
-        nextPageMeta.setDisplayName("&aNext Page");
+        nextPageMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&aNext Page"));
         nextPageMeta.setLore(Stream.of("&7Click to go to the next page").map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList()));
         nextPage.setItemMeta(nextPageMeta);
         navigation.addItem(new GuiItem(nextPage, event -> {
@@ -101,7 +102,7 @@ public class CamMenu {
 
         ItemStack prevPage = new ItemStack(Material.ARROW);
         ItemMeta prevPageMeta = prevPage.getItemMeta();
-        prevPageMeta.setDisplayName("&aPrevious Page");
+        prevPageMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&aPrevious Page"));
         prevPageMeta.setLore(Stream.of("&7Click to go to the previous page").map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList()));
         prevPage.setItemMeta(prevPageMeta);
         navigation.addItem(new GuiItem(prevPage, event -> {
@@ -116,7 +117,7 @@ public class CamMenu {
 
         ItemStack close = new ItemStack(Material.BARRIER);
         ItemMeta closeMeta = close.getItemMeta();
-        closeMeta.setDisplayName("&cClose");
+        closeMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&cClose"));
         closeMeta.setLore(Stream.of("&7Click to close this menu").map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList()));
         close.setItemMeta(closeMeta);
         navigation.addItem(new GuiItem(close, event -> {
@@ -124,10 +125,10 @@ public class CamMenu {
             event.getWhoClicked().closeInventory();
         }), 4, 0);
 
-        if (this.playerCam != null) {
+        /*if (this.playerCam != null) {
             ItemStack exitCam = new ItemStack(Material.FEATHER);
             ItemMeta exitCamMeta = exitCam.getItemMeta();
-            exitCamMeta.setDisplayName("&3Exit Camera");
+            exitCamMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&3Exit Camera"));
             exitCamMeta.setLore(Stream.of("&7Click to exit the camera you're on").map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList()));
             exitCamMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
             exitCamMeta.addEnchant(Enchantment.DURABILITY, 1, true);
@@ -137,25 +138,26 @@ public class CamMenu {
                 plugin.getCameraManager().removePlayer(player);
                 player.closeInventory();
             }), 3, 0);
-        }
+        }*/
 
         return navigation;
     }
 
     private ItemStack getCamItem(CamInfo cam) {
-        boolean playerInThisCam = this.playerCam != null && this.playerCam.getUuid().equals(cam.getUuid());
+        //boolean playerInThisCam = this.playerCam != null && this.playerCam.getUuid().equals(cam.getUuid());
         ItemStack item = new ItemStack(Material.ARMOR_STAND);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName("&e" + cam.getName());
+        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&e" + cam.getName()));
 
-        List<String> lore = List.of("&8UUID: " + cam.getUuid().toString(), "&f ", playerInThisCam ? "&cYou are on this camera" : "&7Click to view this camera");
+        //List<String> lore = List.of("&8UUID: " + cam.getUuid().toString(), "&f ", playerInThisCam ? "&cYou are on this camera" : "&7Click to view this camera");
+        List<String> lore = List.of("&8UUID: " + cam.getUuid().toString(), "&f ", "&7Click to view this camera");
         meta.setLore(lore.stream().map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList()));
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
-        if (playerInThisCam) {
+        /*if (playerInThisCam) {
             meta.addEnchant(org.bukkit.enchantments.Enchantment.DURABILITY, 1, true);
-        }
+        }*/
 
         item.setItemMeta(meta);
         return item;

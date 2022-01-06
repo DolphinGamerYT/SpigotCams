@@ -94,10 +94,12 @@ public class DataFile {
         this.data.set(path + "name", info.getName());
         this.data.set(path + "type", info.getCamType().toString());
         this.saveLocation(path + "loc", info.getLocation());
+        this.save();
     }
 
     public void removeCam(CamInfo info) {
         this.data.set("cams." + info.getUuid().toString(), null);
+        this.save();
     }
 
     public CamInfo getCam(UUID uuid) {

@@ -1,7 +1,7 @@
 name: SpigotCams
 version: '${version}'
 main: com.dolphln.spigotcams.SpigotCams
-api-version: 1.17
+api-version: 1.16
 authors: [ Dolphln ]
 description: Put cams on your world
 website: dolphln.com

@@ -9,7 +9,6 @@ import com.github.stefvanschie.inventoryframework.pane.PaginatedPane;
 import com.github.stefvanschie.inventoryframework.pane.Pane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.google.common.collect.Lists;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -53,7 +52,7 @@ public class CamMenu {
 
         ItemStack bgItem = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
         ItemMeta bgMeta = bgItem.getItemMeta();
-        bgMeta.displayName(LegacyComponentSerializer.legacyAmpersand().deserialize("&f "));
+        bgMeta.setDisplayName("&f ");
         bgMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
         bgItem.setItemMeta(bgMeta);
         StaticPane bg = new StaticPane(0, 5, 9, 1, Pane.Priority.LOWEST);
@@ -87,8 +86,8 @@ public class CamMenu {
 
         ItemStack nextPage = new ItemStack(Material.ARROW);
         ItemMeta nextPageMeta = nextPage.getItemMeta();
-        nextPageMeta.displayName(LegacyComponentSerializer.legacyAmpersand().deserialize("&aNext Page"));
-        nextPageMeta.lore(Stream.of("&7Click to go to the next page").map(line -> LegacyComponentSerializer.legacyAmpersand().deserialize(line)).collect(Collectors.toList()));
+        nextPageMeta.setDisplayName("&aNext Page");
+        nextPageMeta.setLore(Stream.of("&7Click to go to the next page").map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList()));
         nextPage.setItemMeta(nextPageMeta);
         navigation.addItem(new GuiItem(nextPage, event -> {
             event.setCancelled(true);
@@ -102,8 +101,8 @@ public class CamMenu {
 
         ItemStack prevPage = new ItemStack(Material.ARROW);
         ItemMeta prevPageMeta = prevPage.getItemMeta();
-        prevPageMeta.displayName(LegacyComponentSerializer.legacyAmpersand().deserialize("&aPrevious Page"));
-        prevPageMeta.lore(Stream.of("&7Click to go to the previous page").map(line -> LegacyComponentSerializer.legacyAmpersand().deserialize(line)).collect(Collectors.toList()));
+        prevPageMeta.setDisplayName("&aPrevious Page");
+        prevPageMeta.setLore(Stream.of("&7Click to go to the previous page").map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList()));
         prevPage.setItemMeta(prevPageMeta);
         navigation.addItem(new GuiItem(prevPage, event -> {
             event.setCancelled(true);
@@ -117,8 +116,8 @@ public class CamMenu {
 
         ItemStack close = new ItemStack(Material.BARRIER);
         ItemMeta closeMeta = close.getItemMeta();
-        closeMeta.displayName(LegacyComponentSerializer.legacyAmpersand().deserialize("&cClose"));
-        closeMeta.lore(Stream.of("&7Click to close this menu").map(line -> LegacyComponentSerializer.legacyAmpersand().deserialize(line)).collect(Collectors.toList()));
+        closeMeta.setDisplayName("&cClose");
+        closeMeta.setLore(Stream.of("&7Click to close this menu").map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList()));
         close.setItemMeta(closeMeta);
         navigation.addItem(new GuiItem(close, event -> {
             event.setCancelled(true);
@@ -128,8 +127,8 @@ public class CamMenu {
         if (this.playerCam != null) {
             ItemStack exitCam = new ItemStack(Material.FEATHER);
             ItemMeta exitCamMeta = exitCam.getItemMeta();
-            exitCamMeta.displayName(LegacyComponentSerializer.legacyAmpersand().deserialize("&3Exit Camera"));
-            exitCamMeta.lore(Stream.of("&7Click to exit the camera you're on").map(line -> LegacyComponentSerializer.legacyAmpersand().deserialize(line)).collect(Collectors.toList()));
+            exitCamMeta.setDisplayName("&3Exit Camera");
+            exitCamMeta.setLore(Stream.of("&7Click to exit the camera you're on").map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList()));
             exitCamMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
             exitCamMeta.addEnchant(Enchantment.DURABILITY, 1, true);
             exitCam.setItemMeta(exitCamMeta);
@@ -148,10 +147,10 @@ public class CamMenu {
         ItemStack item = new ItemStack(Material.ARMOR_STAND);
         ItemMeta meta = item.getItemMeta();
 
-        meta.displayName(LegacyComponentSerializer.legacyAmpersand().deserialize("&e" + cam.getName()));
+        meta.setDisplayName("&e" + cam.getName());
 
         List<String> lore = List.of("&8UUID: " + cam.getUuid().toString(), "&f ", playerInThisCam ? "&cYou are on this camera" : "&7Click to view this camera");
-        meta.lore(lore.stream().map(line -> LegacyComponentSerializer.legacyAmpersand().deserialize(line)).collect(Collectors.toList()));
+        meta.setLore(lore.stream().map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList()));
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
         if (playerInThisCam) {

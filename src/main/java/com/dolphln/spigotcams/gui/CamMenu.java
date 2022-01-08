@@ -145,7 +145,7 @@ public class CamMenu {
 
     private ItemStack getCamItem(CamInfo cam) {
         //boolean playerInThisCam = this.playerCam != null && this.playerCam.getUuid().equals(cam.getUuid());
-        ItemStack item = new ItemStack(Material.ARMOR_STAND);
+        ItemStack item = new ItemStack(Material.CARVED_PUMPKIN);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&e" + cam.getName()));
